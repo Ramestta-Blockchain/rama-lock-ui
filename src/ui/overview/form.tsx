@@ -1,10 +1,17 @@
-import { Box, Button, Grid, InputBase, Typography } from '@mui/material';
+import { ramaLockContractAddresses } from '@/configs';
+import { ramaLockAbi } from '@/configs/abi/ramalock';
+import { extractDetailsFromError } from '@/lib/extractDetailsFromError';
+import { Box, Button, CircularProgress, Grid, InputBase, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-
+import Image from 'next/image';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { Address, formatEther, parseEther } from 'viem';
+import { useAccount, useChainId, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import rmesta from '../../icons/rmesta.svg'
 
 const useStyles = makeStyles((theme) => ({
-  mainDiv:{
+  mainDiv: {
     border: '1px solid #1D1D20',
     borderRadius: '8px',
     margin: '1rem',
@@ -34,14 +41,56 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     fontSize: '20px',
     '&:hover': {
-        backgroundColor: '#00ffff',
-        color: '#000'
+      backgroundColor: '#00ffff',
+      color: '#000'
     }
+  },
+  worth: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '10px',
+    alignItems: 'center',
+    padding: '1rem 0rem',
+    flexWrap: 'wrap'
 },
+  box_List:{
+    display:'flex',
+    alignItems:'center',
+    gap:'10px'
+}
 }));
 
-const Form = () => {
+const Form = ({ resultOfUserLocked }: any) => {
   const classes = useStyles();
+  const { address } = useAccount()
+  const chainId = useChainId()
+  const { writeContractAsync, data, isPending: isPendingBuyForWrite } = useWriteContract(
+    {
+      mutation: {
+        onSettled(data, error, variables, context) {
+          if (error) {
+            toast.error(extractDetailsFromError(error.message as string) as string)
+          } else {
+            toast.success("Your RAMA Locked successfully")
+          }
+        },
+      }
+    }
+  )
+  const { isLoading } = useWaitForTransactionReceipt({
+    hash: data,
+  })
+
+  const [userName, setUserName] = useState('')
+  const [userAddress, setUserAddress] = useState<Address | null>(null)
+  const [userInvesment, setUserInvesment] = useState('')
+  const [userCommitment, setUserCommitment] = useState('')
+  const [userStartDate, setUserStartDate] = useState('')
+  const [userEndDate, setUserEndDate] = useState('')
+  console.log((new Date(userStartDate !== '' ? userStartDate : 0).getTime()) / 1000, "userStartDate");
+  console.log((new Date(userEndDate !== '' ? userEndDate : 0).getTime()) / 1000, "userEndDate");
+
+  
 
   return (
     <Box className={classes.mainDiv}>
@@ -49,11 +98,12 @@ const Form = () => {
         <Grid lg={6} md={6} sm={12} xs={12} >
           <Box className={classes.top__input}>
             <Typography color="#fff">
-              UserName
+              User Name
             </Typography>
             <Box className={classes.max_btn__wrap}>
               <InputBase
-
+                value={userName}
+                onChange={(e) => { setUserName(e.target.value) }}
                 sx={{
                   flex: 1,
                   color: '#fff',
@@ -64,7 +114,7 @@ const Form = () => {
 
                 }}
                 fullWidth
-                placeholder="Enter Usarname"
+                placeholder="Enter User Name"
                 type="text"
               />
             </Box>
@@ -73,10 +123,12 @@ const Form = () => {
         <Grid lg={6} md={6} sm={12} xs={12} >
           <Box className={classes.top__input}>
             <Typography color="#fff">
-              Address
+              User Address
             </Typography>
             <Box className={classes.max_btn__wrap}>
               <InputBase
+                value={userAddress}
+                onChange={(e) => { setUserAddress(e.target.value as Address) }}
                 sx={{
                   flex: 1,
                   color: '#fff',
@@ -102,7 +154,8 @@ const Form = () => {
             </Typography>
             <Box className={classes.max_btn__wrap}>
               <InputBase
-
+                value={userInvesment}
+                onChange={(e) => { setUserInvesment(e.target.value) }}
                 sx={{
                   flex: 1,
                   color: '#fff',
@@ -119,7 +172,7 @@ const Form = () => {
                   },
                 }}
                 fullWidth
-                placeholder="Enter Your Investment"
+                placeholder="Enter Your Investment In $"
                 type="number"
               />
             </Box>
@@ -132,7 +185,8 @@ const Form = () => {
             </Typography>
             <Box className={classes.max_btn__wrap}>
               <InputBase
-
+                value={userCommitment}
+                onChange={(e) => { setUserCommitment(e.target.value) }}
                 sx={{
                   flex: 1,
                   color: '#fff',
@@ -163,7 +217,8 @@ const Form = () => {
             </Typography>
             <Box className={classes.max_btn__wrap}>
               <InputBase
-
+                value={userStartDate}
+                onChange={(e) => { setUserStartDate(e.target.value) }}
                 sx={{
                   flex: 1,
                   color: '#fff',
@@ -171,7 +226,7 @@ const Form = () => {
                   '::placeholder': {
                     color: '#fff',
                   },
-                   
+
                   '& input[type=number]': {
                     '-moz-appearance': 'textfield',
                   },
@@ -191,11 +246,12 @@ const Form = () => {
         <Grid lg={6} md={6} sm={12} xs={12} >
           <Box className={classes.top__input}>
             <Typography color="#fff">
-            End Date
+              End Date
             </Typography>
             <Box className={classes.max_btn__wrap}>
               <InputBase
-
+                value={userEndDate}
+                onChange={(e) => { setUserEndDate(e.target.value) }}
                 sx={{
                   flex: 1,
                   color: '#fff',
@@ -203,7 +259,7 @@ const Form = () => {
                   '::placeholder': {
                     color: '#fff',
                   },
-                   
+
                   '& input[type=number]': {
                     '-moz-appearance': 'textfield',
                   },
@@ -220,21 +276,73 @@ const Form = () => {
           </Box>
         </Grid>
       </Grid>
-     <Box className={classes.top__input}>
-     <Button
+      <Box className={classes.worth}>
+        {(resultOfUserLocked?.data && userInvesment) &&
+          <>
 
-// disabled={
- 
-// }
-fullWidth={true}
-className={classes.buy__btn}
-sx={{
-    // opacity:  ? "1" : '0.3'
-}}
-   >SUBMIT
- 
-</Button>
-     </Box>
+            <Box className={classes.box_List}>
+              <Image src={rmesta} alt={""} width={40} />
+              <Typography color={'#999'}>RAMA Price:
+                <Typography component={'span'} color={'#fff'}> ${
+                 Number(formatEther?.(BigInt?.(resultOfUserLocked.data[2].result))).toFixed(3)
+                }
+                </Typography>
+              </Typography>
+            </Box>
+          </>
+        }
+        <Box className={classes.box_List}>
+        <Image src={rmesta} alt={""} width={40} />
+          <Typography color={'#999'}>RAMA Lock: <Typography component={'span'} color={'#fff'}>{
+            (resultOfUserLocked?.data) ? (
+              (Number(Number(userInvesment) > 0 ? userInvesment : 0) / Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0)))
+            ).toFixed(3)) : "0.000"
+          } RAMA</Typography></Typography>
+        </Box>
+      </Box>
+      <Box className={classes.top__input}>
+        <Button
+
+
+          disabled={
+
+            ((!userName || !userAddress || !userInvesment || !userCommitment || !userStartDate || !userEndDate) || isPendingBuyForWrite || isLoading
+              // || (
+              //     Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+              //   )
+            )
+          }
+          fullWidth={true}
+          className={classes.buy__btn}
+          sx={{
+            opacity: !(
+              ((!userName || !userAddress || !userInvesment || !userCommitment || !userStartDate || !userEndDate) || isPendingBuyForWrite || isLoading
+                // || (
+                //     Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
+                //   )
+              )
+            )
+              ? "1" : '0.3'
+          }}
+
+          onClick={async () => {
+            await writeContractAsync({
+              abi: ramaLockAbi,
+              address: chainId === 1370 ? ramaLockContractAddresses.ramestta.rama_lock : ramaLockContractAddresses.pingaksha.rama_lock,
+              functionName: 'lock',
+              args: [userName, userAddress as Address, parseEther(userInvesment), parseEther(userCommitment), BigInt((new Date(userStartDate !== '' ? userStartDate : 0).getTime()) / 1000), BigInt((new Date(userEndDate !== '' ? userEndDate : 0).getTime()) / 1000)],
+              account: address,
+              value: parseEther((Number(userInvesment) / Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0)))).toString()),
+            })
+
+
+          }}
+        >Lock
+          {
+            (isPendingBuyForWrite || isLoading) && <CircularProgress size={18} color="inherit" />
+          }
+        </Button>
+      </Box>
     </Box>
   );
 };

@@ -33,7 +33,7 @@ import { ramaPayWallet } from './ramaPayWallet';
 const {wallets}=getDefaultWallets()
 
 export const config = getDefaultConfig({
-  appName: 'Mumblechat ICO',
+  appName: 'Ramestta Lock',
   projectId: 'YOUR_PROJECT_ID',
   wallets: [
     {

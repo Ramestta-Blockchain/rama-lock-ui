@@ -12,6 +12,12 @@ import Form from './form';
 import Card from './card';
 import TableList from './tableList';
 import Calcolate from './calcolate';
+import { useAccount, useBlockNumber, useChainId, useReadContracts } from 'wagmi';
+import { ramaLockAbi } from '@/configs/abi/ramalock';
+import { ramaLockContractAddresses } from '@/configs';
+import { Address } from 'viem';
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 
 
@@ -85,12 +91,44 @@ const useStyles = makeStyles({
 export default function MainTab() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
+    const chainId = useChainId()
+    const {address}=useAccount()
+    const queryClient = useQueryClient()
+    const { data: blockNumber } = useBlockNumber({ watch: true })
+
+    const contractBase= {
+        abi: ramaLockAbi,
+        address: chainId === 1370 ? ramaLockContractAddresses.ramestta.rama_lock : ramaLockContractAddresses.pingaksha.rama_lock,
+    }
+
+    const resultOfUserLocked = useReadContracts({
+        contracts: [
+            {
+                ...contractBase,
+                functionName: 'owner',
+                args: []
+            },
+            {
+                ...contractBase,
+                functionName: 'user2Locked',
+                args: [address as Address]
+            },
+            {
+                ...contractBase,
+                functionName: 'ramaPriceInUSD',
+                args: [],
+            },
+        ]
+    })
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
-    const colorMode = React.useContext(ColorModeContext);
-    const theme = useTheme();
+
+        // use to refetch
+useEffect(() => {
+    queryClient.invalidateQueries({ queryKey:resultOfUserLocked.queryKey }) 
+}, [blockNumber, queryClient,resultOfUserLocked])
 
     return (
         <Box className={classes.mainDiv}>
@@ -126,9 +164,11 @@ export default function MainTab() {
                 </Box>
                 <CustomTabPanel value={value} index={0}>
                     <Box mt={3}>
-                        <Form />
-                        <Card />
-                        <TableList />
+                        {
+                           (resultOfUserLocked?.data && resultOfUserLocked.data[0].result === address ) && <Form resultOfUserLocked={resultOfUserLocked} />
+                        }
+                        <Card resultOfUserLocked={resultOfUserLocked} />
+                        <TableList resultOfUserLocked={resultOfUserLocked} />
                     </Box>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>

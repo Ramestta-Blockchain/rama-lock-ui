@@ -117,8 +117,10 @@ const RootLayout = ({
   return (
     <html lang="en">
       <head>
-      <title>Mumblechat</title>
-      <meta name="description" content={"mumblechat is a web3 messaging dapp with end to end encryption"} />
+      <title>Ramestta Lock</title>
+      <meta name="description" content={
+        "Ramestta is a PoS Blockchain with layer 2 solution for building dApp and connecting EVM-compatible blockchain, it is a faster Blockahin for the Future."
+        } />
       </head>
       <body className={inter.className}>
         <Providers initialState={initialState}>

@@ -1,5 +1,8 @@
+import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
+import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
 import { Box, Grid, InputBase, Typography } from "@mui/material"
 import { makeStyles } from '@mui/styles';
+import { formatEther } from "viem";
 
 
 const useStyles = makeStyles({
@@ -40,7 +43,7 @@ const useStyles = makeStyles({
 
 
 
-const Card = () => {
+const Card = ({resultOfUserLocked}:any) => {
     const classes = useStyles();
 
 
@@ -48,16 +51,32 @@ const Card = () => {
 
         {
             id: 1,
-            Title: 'Your Total Lock',
-            Amount: "0.00",
+            Title: 'Your Total Investment',
+            Amount: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.yourInvestmentInUsd ? resultOfUserLocked.data[1].result.yourInvestmentInUsd : 0))), 2)}`,
+            Amount1: ``
 
         },
         {
             id: 2,
-            Title: 'Your Total Return',
-            Amount: "0.00",
+            Title: 'Your Total Asset Lock',
+            Amount: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.assetAgainstYourInvestment ? resultOfUserLocked.data[1].result.assetAgainstYourInvestment : 0)), 3)} RAMA`,
+            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.assetAgainstYourInvestment? resultOfUserLocked.data[1].result.assetAgainstYourInvestment : 0))) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0))), 3)}`
 
         },
+        {
+            id: 3,
+            Title: 'Your Total Return',
+            Amount: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnCommitmentValueInUsd? resultOfUserLocked.data[1].result.returnCommitmentValueInUsd : 0))), 2)}`,
+            Amount1: ``
+
+        },
+        {
+            id: 4,
+            Title: 'Your Total Return Claimed',
+            Amount: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnClaimedValueInRama ? resultOfUserLocked.data[1].result.returnClaimedValueInRama : 0)), 3)} RAMA`,
+            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnClaimedValueInRama ? resultOfUserLocked.data[1].result.returnClaimedValueInRama : 0))) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[2]?.result ? resultOfUserLocked.data[2].result : 0))), 3)}`
+
+        }
     ]
     return (
         <>
@@ -67,10 +86,11 @@ const Card = () => {
                     <Box className={classes.cardlist}>
                         <Grid container spacing={2}>
                             {Card.map((item, index) => (
-                                <Grid key={index} item lg={6} md={6} sm={6} xs={12}>
+                                <Grid key={index} item lg={3} md={3} sm={6} xs={12}>
                                     <Box className={classes.Card}>
                                         <Typography color={'#fff'}>{item.Title}</Typography>
-                                        <Typography color={'#fff'} variant="h6">{item.Amount} MMCT</Typography>
+                                        <Typography color={'#fff'} variant="h6">{item.Amount}</Typography>
+                                        <Typography color={'#999'} >{item.Amount1}</Typography>
                                     </Box>
                                 </Grid>
                             ))}

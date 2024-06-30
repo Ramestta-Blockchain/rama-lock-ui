@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 
 import Image from "next/image";
 import r2 from '../../icons/r2.svg'
@@ -6,6 +6,18 @@ import HoverTool from "@/theme/components/hoverTool";
 import { makeStyles } from '@mui/styles';
 import logo from '../../icons/rmesta.svg'
 import CountdownTimer from "./countdownTimer";
+import { useAccount, useBlockNumber, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { ramaLockAbi } from "@/configs/abi/ramalock";
+import { ramaLockContractAddresses } from "@/configs";
+import { Address, formatEther, zeroAddress } from "viem";
+import AddressCopy from "@/theme/components/addressCopy";
+import shortenString from "@/lib/shortenString";
+import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString";
+import { convertToAbbreviated } from "@/lib/convertToAbbreviated";
+import { toast } from "react-toastify";
+import { extractDetailsFromError } from "@/lib/extractDetailsFromError";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 
@@ -53,39 +65,172 @@ const useStyles = makeStyles({
 
 
 
-const TableList = () => {
+const TableList = ({ resultOfUserLocked }: any) => {
     const classes = useStyles();
+    const { address } = useAccount()
+    const chainId = useChainId()
+    const queryClient = useQueryClient()
+    const { data: blockNumber } = useBlockNumber({ watch: true })
+    const contractBase = {
+        abi: ramaLockAbi,
+        address: chainId === 1370 ? ramaLockContractAddresses.ramestta.rama_lock : ramaLockContractAddresses.pingaksha.rama_lock,
+    }
 
-    const Tablecol = [
-        {
-            id: 1,
-            Userprofile: logo,
-            ProfileAddress: "0xcc5...be31",
-            Name: 'Junaid',
-            investment: '$0.00',
-            asset: '0.00 RAMA',
-            return: '$0.00',
-            lockTime: 'timer',
-            unlockTime: 'June 30, 2024, at 10:30 AM',
-        },
-        {
-            id: 2,
-            Userprofile: logo,
-            ProfileAddress: "0xcc5...be31",
-            Name: 'Junaid',
-            investment: '$0.00',
-            asset: '0.00 RAMA',
-            return: '$0.00',
-            lockTime: 'timer',
-            unlockTime: 'June 30, 2024, at 10:30 AM',
-        },
+    const resultOfLockersLength = useReadContract({
+        ...contractBase,
+        functionName: 'totalLockersLength',
+        args: [],
+        account: zeroAddress
+    })
+
+    const resultOfLockers = useReadContract({
+        ...contractBase,
+        functionName: 'getLockers',
+        args: [BigInt(0), Number(resultOfLockersLength?.data) > 0 ? resultOfLockersLength.data as bigint : BigInt(0)],
+        account: zeroAddress
+    })
 
 
-    ]
+    // const targetDate = new Date('2024-12-31T23:59:59');
 
-    const targetDate = new Date('2024-12-31T23:59:59');
+    const TableRowCustom = ({ user }: { user: Address }) => {
+        const resultOfUserLockedLength = useReadContract({
+            ...contractBase,
+            functionName: 'totalLockedLengthForUser',
+            args: [user],
+            account: zeroAddress
+        })
+        const resultOfUserLockedList = useReadContract({
+            ...contractBase,
+            functionName: 'user2LockedList',
+            args: [user, BigInt(0), Number(resultOfUserLockedLength?.data) > 0 ? resultOfUserLockedLength.data as bigint : BigInt(0)],
+            account: zeroAddress
+        })
+        const Action = ({ user, index }: { user: Address, index: number }) => {
+            const { writeContractAsync, data, isPending: isPendingUnstakeForWrite } = useWriteContract({
+                mutation: {
+                    onSettled(data, error, variables, context) {
+                        if (error) {
+                            toast.error(extractDetailsFromError(error.message as string) as string)
+                        } else {
+                            toast.success("Unlocked successfully")
+                        }
+                    },
+                }
+            })
+            const { isLoading } = useWaitForTransactionReceipt({
+                hash: data,
+            })
+            return (
+                <Button
+                    disabled={
+                        (isPendingUnstakeForWrite || isLoading)
+                    }
+                    className={classes.stakebtn}
+                    sx={{
+                        opacity: !(
+                            isPendingUnstakeForWrite || isLoading
+                        ) ? "1" : '0.3',
+                        marginLeft: '7px'
+                    }}
+                    onClick={async () => {
+                        await writeContractAsync({
+                            ...contractBase,
+                            functionName: resultOfUserLocked.data[0].result !== address ? 'unlockForUser' : 'unlock',
+                            args: resultOfUserLocked.data[0].result !== address ? [BigInt(index)] : [user, BigInt(index)],
+                            account: address
+                        })
+                    }}
 
+                >Unlock
+                    {
+                        (isPendingUnstakeForWrite || isLoading) && <CircularProgress sx={{ ml: "7px" }} size={18} color="inherit" />
+                    }
+                </Button>
+            )
+        }
+        useEffect(() => {
+            queryClient.invalidateQueries({ queryKey: resultOfUserLockedLength.queryKey })
+            queryClient.invalidateQueries({ queryKey: resultOfUserLockedList.queryKey })
+        }, [blockNumber, queryClient, resultOfUserLockedLength, resultOfUserLockedList])
+        return (
+            <>
+                {
+                    resultOfUserLockedList?.data && resultOfUserLockedList?.data?.length > 0 ? (
+                        resultOfUserLockedList.data.map((item: any, index: number) => (
+                            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} component="th" scope="row">
+                                    <Box sx={{
+                                        display: 'flex',
+                                        gap: '10px',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Image src={logo} alt={""} width={44} />
+                                        <AddressCopy
+                                            textColor="#00ffff !important"
+                                            hrefLink={
+                                                chainId === 1370 ? `https://ramascan.com/address/${user}` :
+                                                    `https://pingaksha.ramascan.com/address/${user}`
+                                            }
+                                            text={user as string}
+                                            addresstext={shortenString(user as Address)} />
+                                    </Box>
+                                </TableCell>
 
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">{item.userName}</TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
+                                    {
+                                        formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item.yourInvestmentInUsd))), 2)
+                                    }
+                                </TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">{
+                                    convertToAbbreviated(formatEther?.(BigInt?.(item.assetAgainstYourInvestment)), 3)
+                                } RAMA</TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
+                                    {
+                                        formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item.returnCommitmentValueInUsd))), 2)
+                                    }
+                                </TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
+                                    {
+                                        convertToAbbreviated(formatEther?.(BigInt?.(item.returnClaimedValueInRama)), 3)
+                                    }
+                                </TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
+                                    {
+                                        new Date(Number(item.lockedTime) * 1000).toLocaleString()
+                                    }
+                                </TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
+                                    {/* <CountdownTimer targetDate={new Date(Number(item.unlockedTime) * 1000)} />
+                                     */}
+                                      {
+                                        new Date(Number(item.unlockedTime) * 1000).toLocaleString()
+                                    }
+                                </TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="right">
+                                    <Action user={user} index={index} />
+                                </TableCell>
+
+                            </TableRow>
+                        ))
+                    ) : (
+                        (
+                            <Box  ml={20} className={classes.noData}>
+                                <Typography color={'#fff'} margin={'auto'}>No Data Found!</Typography>
+                            </Box>
+                        )
+                    )
+
+                }
+            </>
+        )
+    }
+
+    useEffect(() => {
+        queryClient.invalidateQueries({ queryKey: resultOfLockersLength.queryKey })
+        queryClient.invalidateQueries({ queryKey: resultOfLockers.queryKey })
+    }, [blockNumber, queryClient, resultOfLockersLength, resultOfLockers])
 
 
     return (
@@ -114,37 +259,17 @@ const TableList = () => {
                         <TableBody >
 
 
-                            <TableRow
+                            {
+                                resultOfUserLocked?.data && resultOfUserLocked.data[0].result !== address ? (
+                                    <TableRowCustom user={address as Address} />
+                                ) : (
+                                    resultOfLockers.data && resultOfLockers.data.map((item, index) => (
+                                        <TableRowCustom key={index} user={item} />
+                                    ))
+                                )
 
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} component="th" scope="row">
-                                    <Box sx={{
-                                        display: 'flex',
-                                        gap: '10px',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Image src={logo} alt={""} width={50} />
-                                        <Typography>0xcc5...be31</Typography>
-                                    </Box>
-                                </TableCell>
+                            }
 
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">Junaid</TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">$0.00</TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">0.00 RAMA</TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">$0.00</TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">$0.00</TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left"><CountdownTimer targetDate={targetDate} /></TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">June 30, 2024, at 10:30 AM</TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="right"><Button className={classes.stakebtn}>Unlock</Button></TableCell>
-
-                            </TableRow>
-
-
-
-                            {/* <Box ml={30} className={classes.noData}>
-                                            <Typography color={'#fff'} margin={'auto'}>No Data Found!</Typography>
-                                        </Box> */}
 
 
                         </TableBody>

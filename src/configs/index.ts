@@ -70,49 +70,23 @@ export const config = createConfig({
   },
 })
 
-type MmctContractAddressesType= {
+type RamaLockContractAddressesType= {
   ramestta: { 
-    mmct_token: Address,
-    mmct_ico: Address,
-    mmct_referral: Address,
-    mmct_staking: Address,
+    rama_lock: Address,
   },
   pingaksha: {
-    mmct_token: Address,
-    mmct_ico: Address,
-    mmct_referral: Address,
-    mmct_staking: Address,
+    rama_lock: Address,
   }
 }
 
-export const mmctContractAddresses: MmctContractAddressesType = {
+export const ramaLockContractAddresses: RamaLockContractAddressesType = {
   ramestta: { 
-    mmct_token: "0x4b1853C1882ee5c50e5Cb3d7ff05334047AC66Bd",
-    mmct_ico: "0xF14CFCA3D7f35815024197a117eA82d2816Fbc23",
-    mmct_referral: "0xe7A53699DE32B1e33492cbf5398744498B3D2ddc",
-    mmct_staking: "0xE91A1C7B5689d918D40aAA848CDA96dbAa2aba67",
+    rama_lock: "0xBdcE97477cA980e619EB35f5b68792365432ffC4",
   },
   pingaksha: {
-    mmct_token: "0x0537786A0C92439E0F70A92EC0477A8465B7Dade",
-    mmct_ico: "0xdf9E166Ca9d0a4857EEB535D359013469E56e53F",
-    mmct_referral: "0x15Cc8A56770D4B3a5dfCFA42cd036fb8897989b6",
-    mmct_staking: "0xb3339c3252b11F4Aa7534f00F8675f150c81e09c",
+    rama_lock: "0x51357CDC86799CB1108025FB78A7C81411372657",
   }
 }
 
 
-export const formatTier = (tier: number): string => {
-  if (tier === 5) {
-    return 'Elite';
-  } else if (tier === 4) {
-    return 'Diamond';
-  } else if (tier === 3) {
-    return 'Platinum';
-  } else if (tier === 2) {
-    return 'Gold';
-  } else if (tier === 1) {
-    return 'Silver';
-  } else  {
-    return 'Starter';
-  }
-}
+
