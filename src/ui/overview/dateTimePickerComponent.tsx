@@ -9,8 +9,8 @@ import dayjs, { Dayjs } from 'dayjs';
 
 
 
-const DateTimePickerComponent: React.FC = () => {
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs());
+const DateTimePickerComponent = ({value,setValue}:any) => {
+  // const [value, setValue] = React.useState<Dayjs | null>(dayjs());
 
   const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);
@@ -56,26 +56,26 @@ const DateTimePickerComponent: React.FC = () => {
         }}
         value={value}
         onChange={handleChange}
-        renderInput={(props: React.JSX.IntrinsicAttributes & { variant?: TextFieldVariants | undefined; } & Omit<FilledTextFieldProps | OutlinedTextFieldProps | StandardTextFieldProps, "variant">) => (
-          <TextField
-            sx={{
-              outline: 'none',
-              '& fieldset': {
-                borderColor: 'transparent',
-                outline: 'none',
-              },
-              '&:hover fieldset': {
-                borderColor: 'transparent',
-                outline: 'none',
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: 'transparent', // Change border color when focused
-                outline: 'none',
-              },
-            }}
-            {...props}
-          />
-        )}
+        // renderInput={(props: React.JSX.IntrinsicAttributes & { variant?: TextFieldVariants | undefined; } & Omit<FilledTextFieldProps | OutlinedTextFieldProps | StandardTextFieldProps, "variant">) => (
+        //   <TextField
+        //     sx={{
+        //       outline: 'none',
+        //       '& fieldset': {
+        //         borderColor: 'transparent',
+        //         outline: 'none',
+        //       },
+        //       '&:hover fieldset': {
+        //         borderColor: 'transparent',
+        //         outline: 'none',
+        //       },
+        //       '&.Mui-focused fieldset': {
+        //         borderColor: 'transparent', // Change border color when focused
+        //         outline: 'none',
+        //       },
+        //     }}
+        //     {...props}
+        //   />
+        // )}
       />
     </LocalizationProvider>
   );

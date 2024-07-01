@@ -6,12 +6,13 @@ import { makeStyles } from '@mui/styles';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { Address, formatEther, parseEther } from 'viem';
+import { Address, formatEther, isAddress, parseEther } from 'viem';
 import { useAccount, useChainId, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import rmesta from '../../icons/rmesta.svg'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import DateTimePickerComponent from './dateTimePickerComponent';
+import { formatNumberToCurrencyString } from '@/lib/formatNumberToCurrencyString';
 
 const useStyles = makeStyles((theme) => ({
   mainDiv: {
@@ -100,11 +101,11 @@ const Form = ({ resultOfUserLocked }: any) => {
   const [userAddress, setUserAddress] = useState<Address | null>(null)
   const [userInvesment, setUserInvesment] = useState('')
   const [userCommitment, setUserCommitment] = useState('')
-  const [userStartDate, setUserStartDate] = useState('')
-  const [userEndDate, setUserEndDate] = useState('')
+  const [userStartDate, setUserStartDate] = useState<Dayjs | null>(dayjs());
+  const [userEndDate, setUserEndDate] = useState<Dayjs | null>(null);
   const [lockValue, setLockValue] = useState('')
-  console.log((new Date(userStartDate !== '' ? userStartDate : 0).getTime()) / 1000, "userStartDate");
-  console.log((new Date(userEndDate !== '' ? userEndDate : 0).getTime()) / 1000, "userEndDate");
+  // console.log(Number(userStartDate?.toDate().getTime())/1000, "userStartDate")
+
 
 
 
@@ -198,38 +199,6 @@ const Form = ({ resultOfUserLocked }: any) => {
         <Grid lg={6} md={6} sm={12} xs={12} >
           <Box className={classes.top__input}>
             <Typography color="#fff">
-              RAMA Lock Value
-            </Typography>
-            <Box className={classes.max_btn__wrap}>
-              <InputBase
-                value={lockValue}
-                onChange={(e) => { setLockValue(e.target.value) }}
-                sx={{
-                  flex: 1,
-                  color: '#fff',
-                  padding: '0.3rem 0.5rem',
-                  '::placeholder': {
-                    color: '#fff',
-                  },
-                  '& input[type=number]': {
-                    '-moz-appearance': 'textfield',
-                  },
-                  '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
-                    '-webkit-appearance': 'none',
-                    margin: 0,
-                  },
-                }}
-                fullWidth
-                placeholder="RAMA Lock Value"
-                type="number"
-              />
-            </Box>
-          </Box>
-        </Grid>
-
-        <Grid lg={6} md={6} sm={12} xs={12} >
-          <Box className={classes.top__input}>
-            <Typography color="#fff">
               Return Commitment
             </Typography>
             <Box className={classes.max_btn__wrap}>
@@ -265,7 +234,7 @@ const Form = ({ resultOfUserLocked }: any) => {
               Start Date
             </Typography>
             <Box className={classes.max_btn__wrap}>
-              <DateTimePickerComponent />
+              <DateTimePickerComponent value={userStartDate} setValue={setUserStartDate} />
               {/* <InputBase
                 value={userStartDate}
                 onChange={(e) => { setUserStartDate(e.target.value) }}
@@ -293,13 +262,13 @@ const Form = ({ resultOfUserLocked }: any) => {
           </Box>
         </Grid>
 
-        <Grid lg={12} md={12} sm={12} xs={12} >
+        <Grid lg={6} md={6} sm={12} xs={12} >
           <Box className={classes.top__input}>
             <Typography color="#fff">
               End Date
             </Typography>
             <Box className={classes.max_btn__wrap}>
-              <DateTimePickerComponent />
+              <DateTimePickerComponent value={userEndDate} setValue={setUserEndDate} />
               {/* <InputBase
                 value={userEndDate}
                 onChange={(e) => { setUserEndDate(e.target.value) }}
@@ -326,20 +295,60 @@ const Form = ({ resultOfUserLocked }: any) => {
             </Box>
           </Box>
         </Grid>
+        <Grid lg={12} md={12} sm={12} xs={12} >
+          <Box className={classes.top__input}>
+            <Typography color="#fff">
+              RAMA Lock Value
+            </Typography>
+            <Box className={classes.max_btn__wrap}>
+              <InputBase
+                value={lockValue}
+                onChange={(e) => { setLockValue(e.target.value) }}
+                sx={{
+                  flex: 1,
+                  color: '#fff',
+                  padding: '0.3rem 0.5rem',
+                  '::placeholder': {
+                    color: '#fff',
+                  },
+                  '& input[type=number]': {
+                    '-moz-appearance': 'textfield',
+                  },
+                  '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                    '-webkit-appearance': 'none',
+                    margin: 0,
+                  },
+                }}
+                fullWidth
+                placeholder="RAMA Lock Value"
+                type="number"
+              />
+            </Box>
+          </Box>
+        </Grid>
       </Grid>
 
-      <Box className={classes.validate__box} >
-        <Typography component={'span'} fontWeight={200} color={'red'}>Enter a valid Input</Typography>
-      </Box>
+      {
+        (userAddress && !isAddress(userAddress)) && 
+              <Box className={classes.validate__box} >
+              <Typography component={'span'} fontWeight={200} color={'red'}>Enter a valid address</Typography>
+            </Box>
+      }
+      {
+        (userEndDate && userStartDate && (Number(userStartDate.toDate().getTime())/1000)>(Number(userEndDate.toDate().getTime())/1000)) && 
+              <Box className={classes.validate__box} >
+              <Typography component={'span'} fontWeight={200} color={'red'}>End date should be greater</Typography>
+            </Box>
+      }
       <Box className={classes.worth}>
-        {(resultOfUserLocked?.data && userInvesment) &&
+        {resultOfUserLocked?.data?.[2].result &&
           <>
 
             <Box className={classes.box_List}>
               <Image src={rmesta} alt={""} width={40} />
               <Typography color={'#999'}>RAMA Price:
                 <Typography component={'span'} color={'#fff'}> ${
-                  Number(formatEther?.(BigInt?.(resultOfUserLocked.data[2].result))).toFixed(3)
+                  Number(formatEther?.(BigInt?.(resultOfUserLocked.data[2].result))).toFixed(4)
                 }
                 </Typography>
               </Typography>
@@ -351,11 +360,19 @@ const Form = ({ resultOfUserLocked }: any) => {
 
         <Box className={classes.box_List}>
           <Image src={rmesta} alt={""} width={40} />
-          <Typography color={'#999'}>RAMA Lock: <Typography component={'span'} color={'#fff'}>{
+          <Typography color={'#999'}>RAMA Lock Value: <Typography component={'span'} color={'#fff'}>
+            {/* {
             (resultOfUserLocked?.data) ? (
               (Number(Number(userInvesment) > 0 ? userInvesment : 0) / Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0)))
               ).toFixed(3)) : "0.000"
-          } RAMA</Typography></Typography>
+          } */}
+          {
+            formatNumberToCurrencyString(
+              (Number(Number(lockValue) > 0 ? lockValue : 0) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[2]?.result ? resultOfUserLocked.data[2].result : 0)))
+              ),4
+            )
+          }
+          </Typography></Typography>
         </Box>
       </Box>
       <Box className={classes.top__input}>
@@ -364,33 +381,46 @@ const Form = ({ resultOfUserLocked }: any) => {
 
           disabled={
 
-            ((!userName || !userAddress || !userInvesment || !userCommitment || !userStartDate || !userEndDate) || isPendingBuyForWrite || isLoading
+            ((!userName || !userAddress || !userInvesment || !userCommitment || !userStartDate || !userEndDate || !lockValue) || isPendingBuyForWrite || isLoading
               // || (
               //     Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
-              //   )
+              //   ) 
+              || (
+                (Number(userStartDate.toDate().getTime())/1000)>(Number(userEndDate.toDate().getTime())/1000)
+              ) ||
+              (
+                (
+                  !isAddress(userAddress)
+                )
+              )
             )
           }
           fullWidth={true}
           className={classes.buy__btn}
           sx={{
             opacity: !(
-              ((!userName || !userAddress || !userInvesment || !userCommitment || !userStartDate || !userEndDate) || isPendingBuyForWrite || isLoading
+              ((!userName || !userAddress || !userInvesment || !userCommitment || !userStartDate || !userEndDate || !lockValue) || isPendingBuyForWrite || isLoading
                 // || (
                 //     Number(formatEther?.(BigInt?.(balanceOfRama?.data?.value ? balanceOfRama?.data?.value.toString() : 0))) < Number(Number(buyInput) > 0 ? buyInput : 0)
                 //   )
+                || (
+                  (Number(userStartDate.toDate().getTime())/1000)>(Number(userEndDate.toDate().getTime())/1000)
+                ) || (
+                  !isAddress(userAddress)
+                )
               )
             )
               ? "1" : '0.3'
           }}
 
           onClick={async () => {
-            await writeContractAsync({
+            (userAddress && userStartDate && userEndDate ) && await writeContractAsync({
               abi: ramaLockAbi,
               address: chainId === 1370 ? ramaLockContractAddresses.ramestta.rama_lock : ramaLockContractAddresses.pingaksha.rama_lock,
               functionName: 'lock',
-              args: [userName, userAddress as Address, parseEther(userInvesment), parseEther(userCommitment), BigInt((new Date(userStartDate !== '' ? userStartDate : 0).getTime()) / 1000), BigInt((new Date(userEndDate !== '' ? userEndDate : 0).getTime()) / 1000)],
+              args: [userName, userAddress, parseEther(userInvesment), parseEther(userCommitment), BigInt(parseInt(((userStartDate.toDate().getTime())/1000).toString())), BigInt(parseInt(((userEndDate.toDate().getTime())/1000).toString()))],
               account: address,
-              value: parseEther((Number(userInvesment) / Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0)))).toString()),
+              value: parseEther(lockValue),
             })
 
 

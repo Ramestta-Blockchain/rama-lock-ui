@@ -413,7 +413,7 @@ export const ramaLockAbi = [
 						"type": "bool"
 					}
 				],
-				"internalType": "struct RamaLocked.Lock",
+				"internalType": "struct InvestorsLocked.Lock",
 				"name": "",
 				"type": "tuple"
 			}
@@ -484,7 +484,7 @@ export const ramaLockAbi = [
 						"type": "bool"
 					}
 				],
-				"internalType": "struct RamaLocked.Lock[]",
+				"internalType": "struct InvestorsLocked.Lock[]",
 				"name": "result",
 				"type": "tuple[]"
 			}

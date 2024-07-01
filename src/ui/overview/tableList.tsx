@@ -265,9 +265,16 @@ const TableList = ({ resultOfUserLocked }: any) => {
                                 resultOfUserLocked?.data && resultOfUserLocked.data[0].result !== address ? (
                                     <TableRowCustom user={address as Address} />
                                 ) : (
-                                    resultOfLockers.data && resultOfLockers.data.map((item, index) => (
+                                    (resultOfLockers.data && resultOfLockers.data.length>0 ) ? resultOfLockers.data.map((item, index) => (
                                         <TableRowCustom key={index} user={item} />
-                                    ))
+                                    )):
+                                    (
+                                        <TableRow>
+                                            <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} colSpan={9} align="center" className={classes.noData}>
+                                                <Typography color={'#fff'} align="center">No Data Found!</Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
                                 )
 
                             }

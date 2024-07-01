@@ -81,10 +81,10 @@ type RamaLockContractAddressesType= {
 
 export const ramaLockContractAddresses: RamaLockContractAddressesType = {
   ramestta: { 
-    rama_lock: "0xBdcE97477cA980e619EB35f5b68792365432ffC4",
+    rama_lock: "0xFa99FA664456D85Eb2A5e0493113e9F07B473DdC",
   },
   pingaksha: {
-    rama_lock: "0x51357CDC86799CB1108025FB78A7C81411372657",
+    rama_lock: "0x0498e6063404f9c5e7288eEa24464a9e2e74dC99",
   }
 }
 
