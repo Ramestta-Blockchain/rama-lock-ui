@@ -3,11 +3,15 @@ import { formatNumberToCurrencyString } from "@/lib/formatNumberToCurrencyString
 import { Box, Grid, InputBase, Typography } from "@mui/material"
 import { makeStyles } from '@mui/styles';
 import { formatEther } from "viem";
+ 
 
 
 const useStyles = makeStyles({
     mainDiv: {
         margin: '1rem',
+        '@media(max-width : 600px)': {
+            margin: '8px'
+        }
     },
     box_hding: {
 
@@ -21,10 +25,10 @@ const useStyles = makeStyles({
     },
     Card: {
         backgroundColor: '#101012',
-        border: '1px solid #1D1D20',
+        border: '1px solid #02b5b56b',
         padding: '1rem',
         borderRadius: '8px',
-        textAlign: 'center'
+        height: '100%'
     },
     cardlist: {
         padding: '10px',
@@ -43,7 +47,7 @@ const useStyles = makeStyles({
 
 
 
-const Card = ({resultOfUserLocked}:any) => {
+const Card = ({ resultOfUserLocked }: any) => {
     const classes = useStyles();
 
 
@@ -60,13 +64,13 @@ const Card = ({resultOfUserLocked}:any) => {
             id: 2,
             Title: 'Your Total Asset Lock',
             Amount: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.assetAgainstYourInvestment ? resultOfUserLocked.data[1].result.assetAgainstYourInvestment : 0)), 3)} RAMA`,
-            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.assetAgainstYourInvestment? resultOfUserLocked.data[1].result.assetAgainstYourInvestment : 0))) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0))), 3)}`
+            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.assetAgainstYourInvestment ? resultOfUserLocked.data[1].result.assetAgainstYourInvestment : 0))) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0))), 3)}`
 
         },
         {
             id: 3,
             Title: 'Your Total Return',
-            Amount: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnCommitmentValueInUsd? resultOfUserLocked.data[1].result.returnCommitmentValueInUsd : 0))), 2)}`,
+            Amount: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnCommitmentValueInUsd ? resultOfUserLocked.data[1].result.returnCommitmentValueInUsd : 0))), 2)}`,
             Amount1: ``
 
         },
@@ -97,19 +101,22 @@ const Card = ({resultOfUserLocked}:any) => {
 
                         </Grid>
                     </Box>
-                    <Box className={classes.cardlist}>
+                    {/* <Box className={classes.cardlist}>
                         <Grid container spacing={2}>
 
                             <Grid item lg={12} md={12} sm={12} xs={12}>
                                 <Box className={classes.Card}>
-                                    <Typography color={'#fff'} variant="h5">Disclaimer for MumbleChat</Typography>
-                                    <Typography mt={1} color={'#fff'} fontSize={14}> MumbleChat is a platform designed to facilitate communication and collaboration. While we strive to provide a secure and reliable service, we cannot guarantee the accuracy, completeness, or timeliness of any information exchanged through our platform. Users are responsible for the content they share and should exercise caution when sharing personal or sensitive information. MumbleChat is not liable for any direct, indirect, incidental, or consequential damages resulting from the use of our service. By using MumbleChat, you agree to adhere to our terms of service and privacy policy.</Typography>
+                                    <Box sx={{textAlign:'center'}}>
+                                    <Typography color={'#fff'} variant="h5">Mutual Commitment Agreement</Typography>
+                                    <Typography mt={1} color={'#fff'} fontSize={17} variant="h6"> Hello Ramestta Private Investors</Typography>
+                                    </Box>
+                                    
                                 </Box>
                             </Grid>
 
 
                         </Grid>
-                    </Box>
+                    </Box> */}
                 </Box>
 
             </Box>

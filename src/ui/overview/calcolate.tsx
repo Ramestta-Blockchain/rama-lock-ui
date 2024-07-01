@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '5px'
     },
     buy__btn: {
-        backgroundColor: '#00FFFF !important',
+        backgroundColor: '#02b5b5 !important',
         padding: '10px 0px !important',
         borderRadius: '8px !important',
         color: '#000 !important',
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         fontSize: '20px',
         '&:hover': {
-            backgroundColor: '#00ffff',
+            backgroundColor: '#02b5b5',
             color: '#000'
         }
     },

@@ -51,7 +51,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [targetDate]);
 
   return (
     <Box className={classes.countdownContainer}>

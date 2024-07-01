@@ -42,22 +42,22 @@ const useStyles = makeStyles({
     },
     noData: {
         height: '50px',
-        display: 'flex',
+        borderBottom: 'none',
         width: '100%',
         justifyContent: 'center',
         justifyItems: "center",
-        backgroundColor: '#080808'
+        backgroundColor: '#080808',
     },
     stakebtn: {
         backgroundColor: 'transparent',
         padding: '10px',
         borderRadius: '6px',
-        border: '1px solid #00ffff !important',
-        color: '#00ffff !important',
+        border: '1px solid #02b5b5 !important',
+        color: '#02b5b5 !important',
         textDecoration: 'none',
         transition: '0.5s',
         '&:hover': {
-            backgroundColor: '#00ffff !important',
+            backgroundColor: '#02b5b5 !important',
             color: '#000 !important'
         }
     },
@@ -167,7 +167,7 @@ const TableList = ({ resultOfUserLocked }: any) => {
                                     }}>
                                         <Image src={logo} alt={""} width={44} />
                                         <AddressCopy
-                                            textColor="#00ffff !important"
+                                            textColor="#02b5b5 !important"
                                             hrefLink={
                                                 chainId === 1370 ? `https://ramascan.com/address/${user}` :
                                                     `https://pingaksha.ramascan.com/address/${user}`
@@ -204,7 +204,7 @@ const TableList = ({ resultOfUserLocked }: any) => {
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
                                     {/* <CountdownTimer targetDate={new Date(Number(item.unlockedTime) * 1000)} />
                                      */}
-                                      {
+                                    {
                                         new Date(Number(item.unlockedTime) * 1000).toLocaleString()
                                     }
                                 </TableCell>
@@ -216,9 +216,11 @@ const TableList = ({ resultOfUserLocked }: any) => {
                         ))
                     ) : (
                         (
-                            <Box  ml={20} className={classes.noData}>
-                                <Typography color={'#fff'} margin={'auto'}>No Data Found!</Typography>
-                            </Box>
+                            <TableRow>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} colSpan={9} align="center" className={classes.noData}>
+                                    <Typography color={'#fff'} align="center">No Data Found!</Typography>
+                                </TableCell>
+                            </TableRow>
                         )
                     )
 
@@ -238,7 +240,7 @@ const TableList = ({ resultOfUserLocked }: any) => {
         <>
             <Box>
                 <TableContainer component={Paper} className={classes.tableContainer}>
-                    <Table sx={{ minWidth: 1000, backgroundColor: '#080808', border: '1px solid #1D1D20', borderRadius: '4px' }} aria-label="simple table">
+                    <Table sx={{ minWidth: 1200, backgroundColor: '#080808', border: '1px solid #1D1D20', borderRadius: '4px' }} aria-label="simple table">
 
                         <TableHead sx={{ backgroundColor: '#101012' }}>
                             <TableRow>

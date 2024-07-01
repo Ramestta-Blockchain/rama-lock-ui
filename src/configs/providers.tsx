@@ -3,7 +3,7 @@ import { useContext, type ReactNode } from 'react'
 import { type State, WagmiProvider, http } from 'wagmi'
 import '@rainbow-me/rainbowkit/styles.css';
 import { useRouter } from 'next/router';
-import Sheild from '../icons/Sheild.svg'
+import Sheild from '../icons/rmesta.svg'
  
 import Image from 'next/image';
 

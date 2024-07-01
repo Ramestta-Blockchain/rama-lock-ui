@@ -35,6 +35,7 @@ const StyledBoxOne = styled(Box)(({ theme }) => ({
  ;
 
 const StyledLink = styled(Link)(({ theme }) => ({
+    
     'img': {
         '@media(max-width : 600px)': {
             width: '170px',
@@ -96,7 +97,7 @@ export default function Header() {
             <StyledBox>
                  
                 <Box>
-                    <StyledLink href={"/"}><Image src={theme.palette.mode === "dark" ? logo : logo} alt="logo" /></StyledLink>
+                    <StyledLink href={"/"}><Image src={logo} alt="logo" /></StyledLink>
                 </Box>
                 <Box>
                     <Box

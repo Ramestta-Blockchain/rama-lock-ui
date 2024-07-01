@@ -18,6 +18,7 @@ import { ramaLockContractAddresses } from '@/configs';
 import { Address } from 'viem';
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import Terms from './tarms';
 
 
 
@@ -63,6 +64,9 @@ const useStyles = makeStyles({
     mainDiv: {
         margin: '10px',
         minHeight: '100vh',
+        '@media(max-width : 600px)': {
+            margin: '0px 0px 20px 0px'
+        }
     },
     box_hding: {
 
@@ -79,7 +83,7 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        border: '1px solid #00FFFF',
+        border: '1px solid #02b5b5',
         borderRadius: '12px',
         marginTop: '1rem'
     },
@@ -92,11 +96,11 @@ export default function MainTab() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const chainId = useChainId()
-    const {address}=useAccount()
+    const { address } = useAccount()
     const queryClient = useQueryClient()
     const { data: blockNumber } = useBlockNumber({ watch: true })
 
-    const contractBase= {
+    const contractBase = {
         abi: ramaLockAbi,
         address: chainId === 1370 ? ramaLockContractAddresses.ramestta.rama_lock : ramaLockContractAddresses.pingaksha.rama_lock,
     }
@@ -125,10 +129,10 @@ export default function MainTab() {
         setValue(newValue);
     };
 
-        // use to refetch
-useEffect(() => {
-    queryClient.invalidateQueries({ queryKey:resultOfUserLocked.queryKey }) 
-}, [blockNumber, queryClient,resultOfUserLocked])
+    // use to refetch
+    useEffect(() => {
+        queryClient.invalidateQueries({ queryKey: resultOfUserLocked.queryKey })
+    }, [blockNumber, queryClient, resultOfUserLocked])
 
     return (
         <Box className={classes.mainDiv}>
@@ -140,6 +144,7 @@ useEffect(() => {
                 <Box sx={{ textTransform: 'capitalize', }}>
                     <Tabs
                         variant="fullWidth" // Ensure the tabs take up the full width
+                        scrollButtons="auto" // Enable scroll buttons automatically
                         sx={{
                             backgroundColor: '#101012',
                             borderRadius: '8px',
@@ -147,7 +152,7 @@ useEffect(() => {
                             '.MuiTabs-indicator': {
                                 height: 46,
                                 color: '#000 !important',
-                                background: 'linear-gradient(0deg, #00FFFF, #00FFFF)',
+                                background: 'linear-gradient(0deg, #02b5b5, #02b5b5)',
                                 borderRadius: '8px',
                                 backgroundColor: 'transparent',
                             },
@@ -157,21 +162,38 @@ useEffect(() => {
                                 zIndex: '1',
                             }
                         }} value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px' } }} label="Dashboard" {...a11yProps(0)} />
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px' } }} label="Calculator" {...a11yProps(1)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px', flex:'none'} }} label="Dashboard" {...a11yProps(0)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Terms & Conditions" {...a11yProps(1)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Calculator" {...a11yProps(2)} />
 
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
                     <Box mt={3}>
                         {
-                           (resultOfUserLocked?.data && resultOfUserLocked.data[0].result === address ) && <Form resultOfUserLocked={resultOfUserLocked} />
+                            (resultOfUserLocked?.data && resultOfUserLocked.data[0].result === address) && <Form resultOfUserLocked={resultOfUserLocked} />
+
                         }
+                         
                         <Card resultOfUserLocked={resultOfUserLocked} />
-                        <TableList resultOfUserLocked={resultOfUserLocked} />
+                        <Box sx={{
+                            padding: '1rem',
+                            '@media(max-width : 600px)': {
+                                padding: '8px'
+                            }
+                        }}>
+                            <TableList resultOfUserLocked={resultOfUserLocked} />
+                        </Box>
                     </Box>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
+                    <Box mt={3}>
+
+                        <Terms />
+                    </Box>
+                </CustomTabPanel>
+
+                <CustomTabPanel value={value} index={2}>
                     <Box mt={3}>
 
                         <Calcolate />
