@@ -1,6 +1,8 @@
 import { Box, Grid, InputBase, Typography } from "@mui/material"
 import { makeStyles } from "@mui/styles";
+import Image from "next/image";
 import Link from "next/link";
+import rmesta from '../../icons/rmesta.svg'
 
 const useStyles = makeStyles((theme) => ({
     mainDiv: {

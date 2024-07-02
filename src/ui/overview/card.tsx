@@ -57,28 +57,28 @@ const Card = ({ resultOfUserLocked }: any) => {
             id: 1,
             Title: 'Your Total Investment',
             Amount: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.yourInvestmentInUsd ? resultOfUserLocked.data[1].result.yourInvestmentInUsd : 0))), 2)}`,
-            Amount1: ``
+            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.yourInvestmentInUsd ? resultOfUserLocked.data[1].result.yourInvestmentInUsd : 0)))*90, 2,'INR')}`
 
         },
         {
             id: 2,
             Title: 'Your Total Asset Lock',
             Amount: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.assetAgainstYourInvestment ? resultOfUserLocked.data[1].result.assetAgainstYourInvestment : 0)), 3)} RAMA`,
-            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.assetAgainstYourInvestment ? resultOfUserLocked.data[1].result.assetAgainstYourInvestment : 0))) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0))), 3)}`
+            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.assetAgainstYourInvestment ? resultOfUserLocked.data[1].result.assetAgainstYourInvestment : 0))) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0))), 2)}`
 
         },
         {
             id: 3,
             Title: 'Your Total Return',
             Amount: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnCommitmentValueInUsd ? resultOfUserLocked.data[1].result.returnCommitmentValueInUsd : 0))), 2)}`,
-            Amount1: ``
+            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnCommitmentValueInUsd ? resultOfUserLocked.data[1].result.returnCommitmentValueInUsd : 0)))*90, 2,'INR')}`
 
         },
         {
             id: 4,
             Title: 'Your Total Return Claimed',
             Amount: `${convertToAbbreviated(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnClaimedValueInRama ? resultOfUserLocked.data[1].result.returnClaimedValueInRama : 0)), 3)} RAMA`,
-            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnClaimedValueInRama ? resultOfUserLocked.data[1].result.returnClaimedValueInRama : 0))) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[2]?.result ? resultOfUserLocked.data[2].result : 0))), 3)}`
+            Amount1: `${formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[1]?.result?.returnClaimedValueInRama ? resultOfUserLocked.data[1].result.returnClaimedValueInRama : 0))) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[2]?.result ? resultOfUserLocked.data[2].result : 0))), 2)}`
 
         }
     ]

@@ -162,7 +162,7 @@ const TableList = ({ resultOfUserLocked }: any) => {
         useEffect(() => {
             queryClient.invalidateQueries({ queryKey: resultOfUserLockedLength.queryKey })
             queryClient.invalidateQueries({ queryKey: resultOfUserLockedList.queryKey })
-        }, [blockNumber, queryClient, resultOfUserLockedLength, resultOfUserLockedList])
+        }, [resultOfUserLockedLength, resultOfUserLockedList])
         return (
             <>
                 {
@@ -202,7 +202,7 @@ const TableList = ({ resultOfUserLocked }: any) => {
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
                                     <Typography color={'#fff'}>{
 
-                                        convertToAbbreviated(formatEther?.(BigInt?.(item.assetAgainstYourInvestment)), 3)
+                                        convertToAbbreviated(formatEther?.(BigInt?.(item.assetAgainstYourInvestment)), 2)
                                     } RAMA
                                     </Typography>
                                     {/* <Typography color={'#999'}>
@@ -234,26 +234,32 @@ const TableList = ({ resultOfUserLocked }: any) => {
                                     </Typography> 
                                 </TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
-                                    {
-                                        convertToAbbreviated(formatEther?.(BigInt?.(item.returnClaimedValueInRama)), 3)
-                                    }
+                                <Typography color={'#fff'}>
+                                     {
+                                        convertToAbbreviated(formatEther?.(BigInt?.(item.returnClaimedValueInRama)), 2)
+                                    } RAMA
+                                    </Typography>
                                 </TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
-                                    {
+                                <Typography color={'#fff'}>
+                                     {
                                         new Date(Number(item.lockedTime) * 1000).toLocaleString()
                                     }
+                                    </Typography>
                                 </TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
                                     {/* <CountdownTimer targetDate={new Date(Number(item.unlockedTime) * 1000)} />
                                      */}
-                                    {
+                                    <Typography color={'#fff'}>{
                                         new Date(Number(item.unlockedTime) * 1000).toLocaleString()
                                     }
+                                    </Typography>
                                 </TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
-                                    {
+                                <Typography color={'#fff'}>{
                                         item.isUnlocked ? 'Unlocked' : 'Locked'
                                     }
+                                    </Typography>
                                 </TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="right">
                                     <Action user={user} index={index} />
