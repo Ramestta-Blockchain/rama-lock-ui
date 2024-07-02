@@ -1,5 +1,6 @@
 import { Box, Grid, InputBase, Typography } from "@mui/material"
 import { makeStyles } from "@mui/styles";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
     mainDiv: {
@@ -8,9 +9,9 @@ const useStyles = makeStyles((theme) => ({
         margin: '1rem',
     },
     max_btn__wrap: {
-        backgroundColor: '#101012',
-        border: '1px solid #1D1D20',
-        borderRadius: '8px',
+        // backgroundColor: '#101012',
+        // border: '1px solid #1D1D20',
+        // borderRadius: '8px',
         padding: '2px',
         marginTop: '0.5rem',
     },
@@ -63,13 +64,13 @@ const Calcolate = () => {
         <>
             <Box className={classes.maind}>
                 <Grid container spacing={2}>
-                    <Grid item lg={8} md={8} sm={12} xs={12}>
+                    <Grid item lg={4} md={4} sm={12} xs={12}>
                         <Box className={classes.top__input}>
                             <Typography color="#fff">
-                                Your investment in $ USD
+                                Ramestta Official Page
                             </Typography>
                             <Box className={classes.max_btn__wrap}>
-                                <InputBase
+                                {/* <InputBase
 
                                     sx={{
                                         flex: 1,
@@ -90,15 +91,18 @@ const Calcolate = () => {
                                     fullWidth
                                     placeholder="Your investment in $ USD"
                                     type="number"
-                                />
+                                /> */}
+                                <Link style={{color:"#02b5b5",textDecoration:"none"}} href={`https://ramestta.com`} target="_blank" >https://ramestta.com</Link>
                             </Box>
                         </Box>
-                        <Box className={classes.top__input}>
+                    </Grid>
+                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Box className={classes.top__input}>
                             <Typography color="#fff">
-                                Return comitment amount in $ USD
+                                Ramascan For Mainnet
                             </Typography>
                             <Box className={classes.max_btn__wrap}>
-                                <InputBase
+                                {/* <InputBase
 
                                     sx={{
                                         flex: 1,
@@ -119,15 +123,137 @@ const Calcolate = () => {
                                     fullWidth
                                     placeholder="Return comitment amount in $ USD"
                                     type="number"
-                                />
+                                /> */}
+                                <Link style={{color:"#02b5b5",textDecoration:"none"}} href={`https://ramascan.com`} target="_blank" >https://ramascan.com</Link>
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item lg={4} md={4} sm={12} xs={12} >
-                        <Box className={classes.Card}>
-                            <Typography color={'#fff'} variant="h5">2000 RAMA</Typography>
-                            <Typography mt={1} color={'#fff'}>return value</Typography>
-                            <Typography mt={1} color={'#fff'} fontSize={14}>0.00%</Typography>
+                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Box className={classes.top__input}>
+                            <Typography color="#fff">
+                                Ramascan For Pingaksha Testnet
+                            </Typography>
+                            <Box className={classes.max_btn__wrap}>
+                                {/* <InputBase
+
+                                    sx={{
+                                        flex: 1,
+                                        color: '#fff',
+                                        padding: '0.3rem 0.5rem',
+                                        '::placeholder': {
+                                            color: '#fff',
+                                        },
+
+                                        '& input[type=number]': {
+                                            '-moz-appearance': 'textfield',
+                                        },
+                                        '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                                            '-webkit-appearance': 'none',
+                                            margin: 0,
+                                        },
+                                    }}
+                                    fullWidth
+                                    placeholder="Return comitment amount in $ USD"
+                                    type="number"
+                                /> */}
+                                <Link style={{color:"#02b5b5",textDecoration:"none"}} href={`https://pingaksha.ramascan.com`} target="_blank" >https://pingaksha.ramascan.com</Link>
+                            </Box>
+                        </Box>
+                    </Grid>
+                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Box className={classes.top__input}>
+                            <Typography color="#fff">
+                                RamaPay For Android Wallet
+                            </Typography>
+                            <Box className={classes.max_btn__wrap}>
+                                {/* <InputBase
+
+                                    sx={{
+                                        flex: 1,
+                                        color: '#fff',
+                                        padding: '0.3rem 0.5rem',
+                                        '::placeholder': {
+                                            color: '#fff',
+                                        },
+
+                                        '& input[type=number]': {
+                                            '-moz-appearance': 'textfield',
+                                        },
+                                        '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                                            '-webkit-appearance': 'none',
+                                            margin: 0,
+                                        },
+                                    }}
+                                    fullWidth
+                                    placeholder="Return comitment amount in $ USD"
+                                    type="number"
+                                /> */}
+                                <Link style={{color:"#02b5b5",textDecoration:"none"}} href={`https://play.google.com/store/apps/details?id=io.ramestta.wallet&pcampaignid=web_share`} target="_blank" >RamaPay Wallet</Link>
+                            </Box>
+                    </Box>
+                    </Grid>
+                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Box className={classes.top__input}>
+                            <Typography color="#fff">
+                                RamaSwap Dex
+                            </Typography>
+                            <Box className={classes.max_btn__wrap}>
+                                {/* <InputBase
+
+                                    sx={{
+                                        flex: 1,
+                                        color: '#fff',
+                                        padding: '0.3rem 0.5rem',
+                                        '::placeholder': {
+                                            color: '#fff',
+                                        },
+
+                                        '& input[type=number]': {
+                                            '-moz-appearance': 'textfield',
+                                        },
+                                        '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                                            '-webkit-appearance': 'none',
+                                            margin: 0,
+                                        },
+                                    }}
+                                    fullWidth
+                                    placeholder="Return comitment amount in $ USD"
+                                    type="number"
+                                /> */}
+                                <Link style={{color:"#02b5b5",textDecoration:"none"}} href={`https://ramaswap.com`} target="_blank" >https://ramaswap.com</Link>
+                            </Box>
+                        </Box>
+                    </Grid>
+                    <Grid item lg={4} md={4} sm={12} xs={12}>
+                    <Box className={classes.top__input}>
+                            <Typography color="#fff">
+                                Ramestta Validators Info Page
+                            </Typography>
+                            <Box className={classes.max_btn__wrap}>
+                                {/* <InputBase
+
+                                    sx={{
+                                        flex: 1,
+                                        color: '#fff',
+                                        padding: '0.3rem 0.5rem',
+                                        '::placeholder': {
+                                            color: '#fff',
+                                        },
+
+                                        '& input[type=number]': {
+                                            '-moz-appearance': 'textfield',
+                                        },
+                                        '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                                            '-webkit-appearance': 'none',
+                                            margin: 0,
+                                        },
+                                    }}
+                                    fullWidth
+                                    placeholder="Return comitment amount in $ USD"
+                                    type="number"
+                                /> */}
+                                <Link style={{color:"#02b5b5",textDecoration:"none"}} href={`https://validator.ramestta.com`} target="_blank" >https://validator.ramestta.com</Link>
+                            </Box>
                         </Box>
                     </Grid>
                 </Grid>

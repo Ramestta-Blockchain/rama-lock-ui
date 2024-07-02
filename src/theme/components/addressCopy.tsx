@@ -21,7 +21,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
     borderRadius: '8px',
 }));
 
-const StyledLink = styled(Link)(({ theme }) => ({
+export const StyledLink = styled(Link)(({ theme }) => ({
     textDecoration: 'none',
     color: '#000 !important',
     fontWeight: 500,

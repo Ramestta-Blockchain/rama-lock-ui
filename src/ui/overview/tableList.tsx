@@ -87,7 +87,12 @@ const TableList = ({ resultOfUserLocked }: any) => {
         ...contractBase,
         functionName: 'getLockers',
         args: [BigInt(0), Number(resultOfLockersLength?.data) > 0 ? resultOfLockersLength.data as bigint : BigInt(0)],
-        account: zeroAddress
+        account: zeroAddress,
+        query: {
+            select(data) {
+                return data.toReversed()
+            },
+        }
     })
 
 
@@ -104,7 +109,12 @@ const TableList = ({ resultOfUserLocked }: any) => {
             ...contractBase,
             functionName: 'user2LockedList',
             args: [user, BigInt(0), Number(resultOfUserLockedLength?.data) > 0 ? resultOfUserLockedLength.data as bigint : BigInt(0)],
-            account: zeroAddress
+            account: zeroAddress,
+            query: {
+                select(data) {
+                    return data.toReversed()
+                },
+            }
         })
         const Action = ({ user, index }: { user: Address, index: number }) => {
             const { writeContractAsync, data, isPending: isPendingUnstakeForWrite } = useWriteContract({
@@ -179,17 +189,49 @@ const TableList = ({ resultOfUserLocked }: any) => {
 
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">{item.userName}</TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
-                                    {
+                                    <Typography color={'#fff'}>{
                                         formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item.yourInvestmentInUsd))), 2)
                                     }
+                                    </Typography>
+                                    <Typography color={'#999'}>
+                                        {
+                                            formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item.yourInvestmentInUsd))) * 90, 2, 'INR')
+                                        }
+                                    </Typography>
                                 </TableCell>
-                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">{
-                                    convertToAbbreviated(formatEther?.(BigInt?.(item.assetAgainstYourInvestment)), 3)
-                                } RAMA</TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
+                                    <Typography color={'#fff'}>{
+
+                                        convertToAbbreviated(formatEther?.(BigInt?.(item.assetAgainstYourInvestment)), 3)
+                                    } RAMA
+                                    </Typography>
+                                    {/* <Typography color={'#999'}>
+                                        {
+                                            formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item.assetAgainstYourInvestment))) * 
+                                            Number(formatEther?.(resultOfUserLocked.data[2].result))
+                                            , 2)
+                                        }
+                                    </Typography>
+                                    <Typography color={'#999'}>
+                                        {
+                                            formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item.assetAgainstYourInvestment))) * 
+                                            Number(formatEther?.(resultOfUserLocked.data[2].result))*90
+                                            , 2,'INR')
+                                        }
+                                    </Typography> */}
+                                </TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
+                                <Typography color={'#fff'}>
                                     {
                                         formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item.returnCommitmentValueInUsd))), 2)
                                     }
+                                    </Typography>
+                                    <Typography color={'#999'}>
+                                        {
+                                            formatNumberToCurrencyString(Number(formatEther?.(BigInt?.(item.returnCommitmentValueInUsd)))*90
+                                            , 2,'INR')
+                                        }
+                                    </Typography> 
                                 </TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
                                     {
@@ -206,6 +248,11 @@ const TableList = ({ resultOfUserLocked }: any) => {
                                      */}
                                     {
                                         new Date(Number(item.unlockedTime) * 1000).toLocaleString()
+                                    }
+                                </TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="left">
+                                    {
+                                        item.isUnlocked ? 'Unlocked' : 'Locked'
                                     }
                                 </TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} align="right">
@@ -252,6 +299,7 @@ const TableList = ({ resultOfUserLocked }: any) => {
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', fontSize: 18, color: '#fff', padding: 1 }} align="left">Return Claimed</TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', fontSize: 18, color: '#fff', padding: 1 }} align="left">Lock Time</TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', fontSize: 18, color: '#fff', padding: 1 }} align="left">Unlock Time</TableCell>
+                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', fontSize: 18, color: '#fff', padding: 1 }} align="left">Status</TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid #1D1D20', fontSize: 18, color: '#fff', padding: 1 }} align="right">Action</TableCell>
 
                             </TableRow>
@@ -265,16 +313,16 @@ const TableList = ({ resultOfUserLocked }: any) => {
                                 resultOfUserLocked?.data && resultOfUserLocked.data[0].result !== address ? (
                                     <TableRowCustom user={address as Address} />
                                 ) : (
-                                    (resultOfLockers.data && resultOfLockers.data.length>0 ) ? resultOfLockers.data.map((item, index) => (
+                                    (resultOfLockers.data && resultOfLockers.data.length > 0) ? resultOfLockers.data.map((item, index) => (
                                         <TableRowCustom key={index} user={item} />
-                                    )):
-                                    (
-                                        <TableRow>
-                                            <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} colSpan={9} align="center" className={classes.noData}>
-                                                <Typography color={'#fff'} align="center">No Data Found!</Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    )
+                                    )) :
+                                        (
+                                            <TableRow>
+                                                <TableCell sx={{ borderBottom: '1px solid #1D1D20', padding: 1, color: '#fff' }} colSpan={9} align="center" className={classes.noData}>
+                                                    <Typography color={'#fff'} align="center">No Data Found!</Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                        )
                                 )
 
                             }

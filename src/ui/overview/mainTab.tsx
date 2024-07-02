@@ -164,7 +164,7 @@ export default function MainTab() {
                         }} value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px', flex:'none'} }} label="Dashboard" {...a11yProps(0)} />
                         <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Terms & Conditions" {...a11yProps(1)} />
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Calculator" {...a11yProps(2)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Ramestta Updates" {...a11yProps(2)} />
 
                     </Tabs>
                 </Box>

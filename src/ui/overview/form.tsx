@@ -352,6 +352,10 @@ const Form = ({ resultOfUserLocked }: any) => {
                 }
                 </Typography>
               </Typography>
+              <Typography color={'#999'}> ₹{
+                  (Number(formatEther?.(BigInt?.(resultOfUserLocked.data[2].result)))*90).toFixed(4)
+                }
+                </Typography>
             </Box>
           </>
         }
@@ -360,7 +364,7 @@ const Form = ({ resultOfUserLocked }: any) => {
 
         <Box className={classes.box_List}>
           <Image src={rmesta} alt={""} width={40} />
-          <Typography color={'#999'}>RAMA Lock Value: <Typography component={'span'} color={'#fff'}>
+          <Typography color={'#999'}>RAMA Lock: <Typography component={'span'} color={'#fff'}>
             {/* {
             (resultOfUserLocked?.data) ? (
               (Number(Number(userInvesment) > 0 ? userInvesment : 0) / Number(formatEther?.(BigInt?.(resultOfUserLocked?.data ? resultOfUserLocked.data[2].result : 0)))
@@ -372,7 +376,13 @@ const Form = ({ resultOfUserLocked }: any) => {
               ),4
             )
           }
-          </Typography></Typography>
+          </Typography>
+          </Typography>
+          <Typography color={'#999'}> ₹{
+                  ((Number(Number(lockValue) > 0 ? lockValue : 0) * Number(formatEther?.(BigInt?.(resultOfUserLocked?.data?.[2]?.result ? resultOfUserLocked.data[2].result : 0)))
+                )*90).toFixed(4)
+                }
+                </Typography>
         </Box>
       </Box>
       <Box className={classes.top__input}>
