@@ -78,7 +78,7 @@ const Terms = ({ resultOfUserLocked }: any) => {
                                 <Box className={classes.Card}>
                                     <Box sx={{ textAlign: 'center' }}>
                                         <Typography color={'#000'} variant="h5">Mutual Commitment Agreement</Typography>
-                                        <Typography mt={1} color={'#000'} fontSize={17} variant="h6"> Hello Ramestta Private Investors</Typography>
+                                        <Typography mt={1} color={'#000'} fontSize={17} variant="h6">Hello Ramestta Private Investors</Typography>
                                     </Box>
 
                                 </Box>
@@ -103,24 +103,24 @@ const Terms = ({ resultOfUserLocked }: any) => {
                                 </Box>
 
                                 <Box className={classes.stepByStepbox}>
-                                <Typography color={'#fff'} variant="h6">For example :</Typography>
-                                <Typography mt={1} color={'#fff'}  fontWeight={700}>Invested Amount: <Typography component={'span'} fontWeight={300}>$10,000</Typography></Typography>
-                                <Typography mt={1} color={'#fff'}  fontWeight={700}>Date of Investment: <Typography component={'span'} fontWeight={300}>When investment initiated</Typography></Typography>
-                                <Typography mt={1} color={'#fff'} fontWeight={700}>Return Value: <Typography component={'span'} fontWeight={300}>$22,000</Typography></Typography>
-                                <Typography mt={1} color={'#fff'}  fontWeight={700}>Tenure: <Typography component={'span'} fontWeight={300}>25 months</Typography></Typography>
+                                <Typography color={'#fff'} variant="h6">Example for Clarity</Typography>
+                                <Typography mt={1} color={'#fff'}  fontWeight={700}>Invested Amount: <Typography component={'span'} fontWeight={300}>Investment amount can be a minimum of $5,000 and a maximum of $10,000,000, depending on the investor.</Typography></Typography>
+                                <Typography mt={1} color={'#fff'}  fontWeight={700}>Date of Investment: <Typography component={'span'} fontWeight={300}>When investment is initiated.</Typography></Typography>
+                                <Typography mt={1} color={'#fff'} fontWeight={700}>Return Value: <Typography component={'span'} fontWeight={300}>Return commitment value varies from investor to investor, depending on the amount of investment. The minimum and maximum returns are mutually decided between the developer and investors.</Typography></Typography>
+                                <Typography mt={1} color={'#fff'}  fontWeight={700}>Tenure: <Typography component={'span'} fontWeight={300}>Tenure also varies, with the minimum tenure being 24 months. It is determined based on mutual consent and understanding.</Typography></Typography>
                                 </Box>
 
                                 <Box className={classes.stepByStep}>
                                 <Typography color={'#02b5b5'} variant="h5">Terms of Investment</Typography>
-                                <Typography mt={1} color={'#fff'} variant="h6">Initial Locking: <Typography component={'span'}>The contract will lock RAMA worth $10,000 based on the market price on the date of investment.</Typography></Typography>
-                                <Typography mt={1} color={'#fff'} variant="h6">Return Mechanism: <Typography component={'span'}>At the end of the 25-month tenure, the smart contract will check the current market value of the locked RAMA.</Typography></Typography>
+                                <Typography mt={1} color={'#fff'} variant="h6">Initial Locking: <Typography component={'span'}>The contract will lock RAMA worth the invested amount based on the market price on the date of investment.</Typography></Typography>
+                                <Typography mt={1} color={'#fff'} variant="h6">Return Mechanism: <Typography component={'span'}>At the end of the tenure, the smart contract will automatically check the current market value of the locked RAMA.</Typography></Typography>
                                 </Box>
 
                                 <Box className={classes.stepByStepbox}>
-                                <Typography color={'#fff'}>Example :</Typography>
-                                <Typography mt={1} color={'#fff'} >If the market value of RAMA equals $22,000, the same amount of RAMA will be released to the investor.</Typography>
-                                <Typography mt={1} color={'#fff'} >If the value is lower than $22,000, the contract will add RAMA to match the committed return amount of $22,000.</Typography>
-                                <Typography mt={1} color={'#fff'} >If the value is greater than $22,000, the contract will reduce the RAMA quantity to match the committed return amount of $22,000.</Typography>
+                                <Typography color={'#fff'}>Example:</Typography>
+                                <Typography mt={1} color={'#fff'} >If the market value of locked RAMA equals the return commitment amount, the same quantity of RAMA will be released to the investor, so that the investor can sell RAMA on the exchange and get their money in their fiat account.</Typography>
+                                <Typography mt={1} color={'#fff'} >If the value is lower than the return commitment amount, the contract will add more RAMA to match the committed return amount.</Typography>
+                                <Typography mt={1} color={'#fff'} >If the value is greater than the return commitment amount, the contract will reduce the RAMA quantity to match the committed return amount.</Typography>
                                 </Box>
 
                                 <Box className={classes.stepByStep}>
@@ -129,7 +129,7 @@ const Terms = ({ resultOfUserLocked }: any) => {
                                 </Box>
 
                                 <Box className={classes.stepByStep}>
-                                <Typography mt={1} color={'#02b5b5'} >All investments will be legally subjected to terms of the above polices</Typography>
+                                <Typography mt={1} color={'#02b5b5'} >All investments will be legally subject to the terms of the above policies.</Typography>
                                 </Box>
 
                                  
