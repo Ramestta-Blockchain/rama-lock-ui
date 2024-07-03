@@ -4,17 +4,12 @@ import { Box, Drawer, styled, useTheme, } from "@mui/material";
 import Link from "next/link";
 import logo from '../../icons/logo.svg'
 import logol from '../../icons/logol.svg'
-
 import { useContext, useState } from "react";
-
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-
 import ConnectWallet from "./connectWallet";
 import { useAccount, useChainId, useSwitchChain } from 'wagmi'
 import { config } from "@/configs/providers";
 import { ColorModeContext } from "@/context";
-import Iconbuttoncustom from "@/theme/components/iconbuttoncustom";
-import Sidebar from "./sidebar";
 
 
 
@@ -23,6 +18,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height:'70px'
 }));
 
 const StyledBoxOne = styled(Box)(({ theme }) => ({
