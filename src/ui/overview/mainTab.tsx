@@ -150,11 +150,12 @@ export default function MainTab() {
                             borderRadius: '8px',
                             padding: '4px 6px 6px 6px',
                             '.MuiTabs-indicator': {
-                                height: 46,
+                                height: 47,
                                 color: '#000 !important',
                                 background: 'linear-gradient(0deg, #02b5b5, #02b5b5)',
                                 borderRadius: '8px',
                                 backgroundColor: 'transparent',
+                                top:'11px'
                             },
                             '.Mui-selected': {
                                 color: "#000 !important",
@@ -162,9 +163,9 @@ export default function MainTab() {
                                 zIndex: '1',
                             }
                         }} value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px', flex:'none'} }} label="Dashboard" {...a11yProps(0)} />
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Terms & Conditions" {...a11yProps(1)} />
-                        <Tab sx={{ textTransform: 'capitalize', color: "#999", flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Ramestta Updates" {...a11yProps(2)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", border:'1px solid rgb(2, 181, 181)', margin:'10px',borderRadius:'8px', flex: 1, '@media(max-width : 600px)': { padding: '12px 10px', flex:'none'} }} label="Dashboard" {...a11yProps(0)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", border:'1px solid rgb(2, 181, 181)', margin:'10px',borderRadius:'8px', flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Terms & Conditions" {...a11yProps(1)} />
+                        <Tab sx={{ textTransform: 'capitalize', color: "#999", border:'1px solid rgb(2, 181, 181)', margin:'10px',borderRadius:'8px', flex: 1, '@media(max-width : 600px)': { padding: '12px 10px',flex:'none' } }} label="Ramestta Updates" {...a11yProps(2)} />
 
                     </Tabs>
                 </Box>
